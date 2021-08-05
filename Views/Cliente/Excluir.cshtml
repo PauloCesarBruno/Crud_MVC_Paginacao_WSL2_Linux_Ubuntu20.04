@@ -1,0 +1,39 @@
+﻿<div class="modal-dialog">
+    <div class="modal-content modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"></span><span class="sr-only">Close</span></button>
+            <h5 style="padding-right: 400px; class="modal-title">Exclusão</h5>
+        </div>
+        <div class="modal-body">
+            <h6>Deseja Realmente Excluir o Registro selecionado ?</h6>
+            <hr />
+            <br />
+
+            <div class="form-check-inline">
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="Nao()"><i class="fa fa-step-backward"></i> Não</button>
+                <button type="button" class="btn btn-outline-success btn-sm ml-1 Cadastro"> <i class="fa fa-eraser"></i> Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(function () {
+            $(".Cadastro").click(function () {
+                var id = $(this).attr("data-id");
+                $("#modal").load("ExcluirCliente?id=" + '@ViewData["IdExcluir"].ToString()', function () {
+                    $("#modal").modal();
+                })
+            });
+        })
+
+    </script>
+}
+
+<script>
+    function Nao() {
+        window.location.href = '../../Cliente/Index';
+    }
+</script>

@@ -1,0 +1,70 @@
+﻿@model ModelCadastro
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="icon" href="~/img/Icone.ico" />
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="container">
+            <br />
+            <h3>Cadastro de Usuários</h3>
+            <br />
+
+            <form asp-controller="Cadastro" asp-action="Cadastro" method="post">
+                <input asp-for="Id" type="hidden" class="form-control" value="@try { @ViewBag.User.Id } catch { }" />
+
+                <div class="form-row">
+                    <div class="col col-8">
+                        <label>Nome</label>
+                        <input asp-for="Nome" type="text" class="form-control" value="@try { @ViewBag.User.Nome } catch { }" />
+                        <span class="text-danger" asp-validation-for="Nome"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col col-4">
+                        <label>Email</label>
+                        <input asp-for="Email" type="text" class="form-control" value="@try { @ViewBag.User.Email } catch { }" />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col col-4">
+                        <label>Senha</label>
+                        <input asp-for="Senha" type="password" class="form-control" value="@try { @ViewBag.User.Senha } catch { }" />
+                        <span class="text-danger" asp-validation-for="Senha"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col col-4">
+                        <label>Confirme à Senha</label>
+                        <input asp-for="ConfSenha" type="password" class="form-control" value="@try { @ViewBag.User.ConfSenha } catch { }" />
+                        <span class="text-danger" asp-validation-for="ConfSenha"></span>
+                    </div>
+                </div>
+
+                <br /><hr />
+
+                <div class="form-inline">
+                    <button type="submit" class="btn btn-outline-primary btn-sm"><i class="fa fa-check"></i> Registrar</button>
+                    <button type="button" class="btn btn-outline-dark btn-sm ml-3" onclick="Desistir()"><i class="fa fa-times"></i> Desistir</button>
+                </div>
+
+                <br /><hr />
+                @DateTime.Now.Year - Treino MVC - por Paulo Bruno &reg;
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Desistir() {
+        window.location.href = '../Home/Login';
+    }
+</script>

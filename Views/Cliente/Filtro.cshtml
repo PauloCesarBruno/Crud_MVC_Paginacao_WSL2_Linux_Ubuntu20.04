@@ -1,0 +1,133 @@
+﻿@model ModelCliente
+
+<script>
+    var total = 0;
+    $(document).ready(function () {
+        $('table tbody tr').each(function () {
+            total += parseFloat(this.children[4].innerHTML.replace(',', '.'));
+        });
+        $('table tfoot td').text(total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }));
+    });
+</script>
+<div class=" container">
+    <h3>Filtro</h3>
+    <hr />
+
+    <form asp-controller="Cliente" asp-action="Filtro">
+        <div class="form-row">
+            <div class="col col-8">
+                <input asp-for="CPF" type="text" class="form-control" placeholder="CPF/CNPJ" />
+            </div>
+            <div class=" col col-4">
+                <button type="submit" class="btn btn-outline-primary"><i class="fa fa-check"></i> Buscar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<br />
+
+<div class="container">
+    <div class="table">
+        <table id="tblFilt" class="table-bordered table-bordered-sm">
+            <thead>
+                <tr>
+                    <td style="padding: 0px 20px 0px 20px; color: red;">Id</td>
+                    <td style="padding: 0px 20px 0px 20px;">Nome</td>
+                    <td style="padding: 0px 20px 0px 20px;">CPF/CNPJ</td>
+                    <td style="padding: 0px 20px 0px 20px;">Nascimento</td>
+                    <td style="padding: 0px 20px 0px 20px;">Limite</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    @try
+                    {
+                        @foreach (var item in (List<ModelCliente>)ViewBag.ListarClientes)
+                        {
+                            <tr>
+                                <td style="padding: 0px 20px 0px 20px; color: red;">@item.Id</td>
+                                <td style="padding: 0px 20px 0px 20px;">@item.Nome</td>
+                                <td style="padding: 0px 20px 0px 20px;">@item.CPF</td>
+                                <td style="padding: 0px 20px 0px 20px;">@item.DataNascimento.ToShortDateString()</td>
+                                <td style="padding: 0px 20px 0px 20px;">@item.LimiteDeCredito</td>
+
+                                <td style="padding: 2px;"><button type="button" class="btn btn-outline-warning btn-sm Editar" data-id="@item.Id"> <i class="fa fa-edit"></i> Editar</button></td>
+                                <td style="padding: 2px;"><button type="button" class="btn btn-outline-danger btn-sm Excluir" data-id="@item.Id"> <i class="fa fa-eraser"></i> Excluir</button></td>
+                            </tr>
+                        }
+                    }
+                    catch
+                    {
+                        //
+                    }
+                }
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th style="padding-left: 5px;" colspan=4>Total Investido</th>
+                    <td style="color: blue; padding-left: 18px; font-style:oblique"></td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+        <div class="modal" id="modal">
+
+        </div>
+
+        @section scripts{
+            <script>
+                $(function () {
+                    $(".Editar").click(function () {
+                        var id = $(this).attr("data-id");
+                        $("#modal").load("Cadastro?id=" + id, function () {
+                            $("#modal").modal();
+                        })
+                    });
+                })
+
+                $(function () {
+                    $(".Excluir").click(function () {
+                        var id = $(this).attr("data-id");
+                        $("#modal").load("Excluir?id=" + id, function () {
+                            $("#modal").modal();
+                        })
+                    });
+                })
+
+                 $(document).ready(function() {
+                    $('#tblFilt').DataTable( {
+                    language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json'
+            }
+        });
+    });
+
+            </script>
+        }
+
+        <hr />
+
+        <div>
+            <button type="button" class=" btn btn-outline-dark btn-sm" onclick="Voltar()"> <i class="fa fa-step-backward"></i> Voltar</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <br /><hr />
+            <p>@DateTime.Now.Year - Treino MVC - Por Paulo Bruno &reg;</p>
+        </div>
+
+
+        <script>
+
+            function Voltar() {
+                window.location.href = '../Cliente/Index';
+            }
+        </script>
+    </div>
+</div>
