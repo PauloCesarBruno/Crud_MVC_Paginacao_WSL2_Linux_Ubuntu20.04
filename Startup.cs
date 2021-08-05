@@ -23,7 +23,6 @@ namespace Treinando_MVC_e_Sessao
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddCors();
-            services.AddMvcCore();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
