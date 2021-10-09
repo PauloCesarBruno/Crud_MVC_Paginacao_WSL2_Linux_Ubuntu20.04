@@ -7,7 +7,7 @@ namespace Treinando_MVC_e_Sessao.Data_Access_Layer
 {
     public class DAL
     {
-        public static readonly String Server = "DESKTOP-EJP79KA";
+        public static readonly String Server = "HOME";
         public static readonly String Database = "TreinoASPCore2_2";
         public static readonly String User = "sa";
         public static readonly String Password = "Paradoxo22";
