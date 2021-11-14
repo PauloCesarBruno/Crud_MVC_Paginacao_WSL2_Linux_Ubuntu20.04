@@ -1,31 +1,32 @@
 ﻿using System;
 //
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace Treinando_MVC_e_Sessao.Data_Access_Layer
 {
     public class DAL
     {
-        public static readonly String Server = "HOME";
-        public static readonly String Database = "TreinoASPCore2_2";
-        public static readonly String User = "sa";
-        public static readonly String Password = "Paradoxo22";
+        private static String Server = "localhost"; // Servidor MySQL
+        private static String Database = "CrudClientes"; // Banco de Dados no MySQL
+        private static String User = "paulo"; // Usuário MySQL
+        private static String Password = "abc123"; // Senha MySQL
 
-        public static readonly String StrSql = $"Server = {Server}; Database = {Database}; Uid = {User}; Pwd = {Password}";
+        // String de Conexão MySQL
+        private static String Connectionstring= $"Server={Server};Database={Database};Uid={User};Pwd={Password};Sslmode=none;Charset=utf8;";
 
-        public SqlConnection Conexao ()
+        public MySqlConnection Conexao ()
         {
-            return new SqlConnection(StrSql);
+            return new MySqlConnection(Connectionstring);
         }
 
         public void FecharConexao()
         {
-            SqlConnection conn = Conexao();
+            MySqlConnection conn = Conexao();
             conn.Close();
         }
 
-        private SqlParameterCollection Colecao = new SqlCommand().Parameters;
+        private MySqlParameterCollection Colecao = new MySqlCommand().Parameters;
 
         public void LimparParametro()
         {
@@ -34,23 +35,23 @@ namespace Treinando_MVC_e_Sessao.Data_Access_Layer
 
         public void AddParametros(String nome, Object valor)
         {
-            Colecao.Add(new SqlParameter(nome, valor));
+            Colecao.Add(new MySqlParameter(nome, valor));
         }
 
         public Object ExecutarManipulacao(CommandType commandType, String Sp_Ou_Texto)
         {
             try
             {
-                SqlConnection conn = Conexao();
+                MySqlConnection conn = Conexao();
                 conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                MySqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = commandType;
                 cmd.CommandText = Sp_Ou_Texto;
                 cmd.CommandTimeout = 3600;
 
-                foreach (SqlParameter param in Colecao)
+                foreach (MySqlParameter param in Colecao)
                 {
-                    cmd.Parameters.Add(new SqlParameter(param.ParameterName, param.Value));
+                    cmd.Parameters.Add(new MySqlParameter(param.ParameterName, param.Value));
                 }
                 return cmd.ExecuteScalar();
             }
@@ -64,19 +65,19 @@ namespace Treinando_MVC_e_Sessao.Data_Access_Layer
         {
             try
             {
-                SqlConnection conn = Conexao();
+                MySqlConnection conn = Conexao();
                 conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                MySqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = commandType;
                 cmd.CommandText = Sp_Ou_Texto;
                 cmd.CommandTimeout = 3600;
 
-                foreach (SqlParameter param in Colecao)
+                foreach (MySqlParameter param in Colecao)
                 {
-                    cmd.Parameters.Add(new SqlParameter(param.ParameterName, param.Value));
+                    cmd.Parameters.Add(new MySqlParameter(param.ParameterName, param.Value));
                 }
                 DataTable dt = new DataTable();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.Fill(dt);
                 return dt;
             }
@@ -91,8 +92,8 @@ namespace Treinando_MVC_e_Sessao.Data_Access_Layer
             try
             {
                 DataTable dt = new DataTable();
-                SqlCommand cmd = new SqlCommand(sql, Conexao());
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                MySqlCommand cmd = new MySqlCommand(sql, Conexao());
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.Fill(dt);
                 return dt;
             }
@@ -103,13 +104,13 @@ namespace Treinando_MVC_e_Sessao.Data_Access_Layer
         }
 
         // Polimorfismo para evitar ataque de injecão de SQL...
-        public DataTable RetDatatable(SqlCommand cmd)
+        public DataTable RetDatatable(MySqlCommand cmd)
         {
             try
             {
                 DataTable dt = new DataTable();
                 cmd.Connection = Conexao();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 da.Fill(dt);
                 return dt;
             }

@@ -17,11 +17,8 @@ namespace Treinando_MVC_e_Sessao.Models
         [Display(Name ="CPF / CNPJ")]
         public String CPF { get; set; }
 
-        [Display(Name ="Data de Nascimento")]
-        [DataType(DataType.Date)]
-         //ABAIXO FORMATAR A DATA SEM A HORA
-        [DisplayFormat(DataFormatString = "{0: dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime DataNascimento { get; set; }
+        [Display(Name ="Data de Nascimento")]        
+        public string DataNascimento { get; set; }
 
         [Display(Name = "Limite de Crédito")]
         [DataType(DataType.Currency)]
@@ -44,7 +41,7 @@ namespace Treinando_MVC_e_Sessao.Models
                         Id = dt.Rows[i]["Id"].ToString(),
                         Nome = dt.Rows[i]["Nome"].ToString(),
                         CPF = dt.Rows[i]["CPF"].ToString(),
-                        DataNascimento = DateTime.Parse (dt.Rows[i]["DataNascimento"].ToString()),
+                        DataNascimento = dt.Rows[i]["DataNascimento"].ToString(),
                         LimiteDeCredito = Convert.ToDecimal (dt.Rows[i]["LimiteDeCredito"])
                     };
                     lista.Add(item);
@@ -75,7 +72,7 @@ namespace Treinando_MVC_e_Sessao.Models
                         Id = dt.Rows[i]["Id"].ToString(),
                         Nome = dt.Rows[i]["Nome"].ToString(),
                         CPF = dt.Rows[i]["CPF"].ToString(),
-                        DataNascimento = DateTime.Parse(dt.Rows[i]["DataNascimento"].ToString()),
+                        DataNascimento = dt.Rows[i]["DataNascimento"].ToString(),
                         LimiteDeCredito = Convert.ToDecimal(dt.Rows[i]["LimiteDeCredito"])
                     };
                     lista.Add(item);
@@ -103,7 +100,7 @@ namespace Treinando_MVC_e_Sessao.Models
                     Id = dt.Rows[0]["Id"].ToString(),
                     Nome = dt.Rows[0]["Nome"].ToString(),
                     CPF = dt.Rows[0]["CPF"].ToString(),
-                    DataNascimento = DateTime.Parse (dt.Rows[0]["DataNascimento"].ToString()),
+                    DataNascimento = dt.Rows[0]["DataNascimento"].ToString(),
                     LimiteDeCredito = Convert.ToDecimal (dt.Rows[0]["LimiteDeCredito"])
                 };
                 objDAL.FecharConexao();
@@ -129,7 +126,8 @@ namespace Treinando_MVC_e_Sessao.Models
                     objDAL.AddParametros("CPF", CPF);
                     objDAL.AddParametros("DataNascimento", DataNascimento);
                     objDAL.AddParametros("LimiteDeCredito", LimiteDeCredito);
-                    String IdCliente = objDAL.ExecutarManipulacao(CommandType.StoredProcedure, "Alterar").ToString();
+                    String IdCliente = objDAL.ExecutarManipulacao(CommandType.Text, "UPDATE Clientes SET Nome = @Nome, CPF = @CPF, DataNascimento = @DataNascimento, LimiteDeCredito = @LimiteDeCredito where Id = @Id").ToString();
+
                     objDAL.FecharConexao();
                 }
                 else
@@ -157,7 +155,7 @@ namespace Treinando_MVC_e_Sessao.Models
                 DAL objDAL = new DAL();
                 objDAL.LimparParametro();
                 objDAL.AddParametros("Id", Id);
-                String IdCliente = objDAL.ExecutarManipulacao(CommandType.StoredProcedure, "Excluir").ToString();
+                String IdCliente = objDAL.ExecutarManipulacao(CommandType.Text, $"DELETE FROM Clientes WHERE Id = '{Id}'").ToString();
                 objDAL.FecharConexao();
             }
             catch (Exception ex)
